@@ -7,16 +7,17 @@ def restData():
 
 
 """ Part 1 """
-def Intcode(code, opcode):
+def Intcode(code, pointer):
     while True:
-        if code[opcode] == 1:
-            code[code[opcode+3]] = code[code[opcode+1]] + code[code[opcode+2]]
-
-            opcode += 4
-        elif code[opcode] == 2:
-            code[code[opcode+3]] = code[code[opcode+1]] * code[code[opcode+2]]
-            opcode += 4
-        elif code[opcode] == 99:
+        if code[pointer] == 1:
+            code[code[pointer+3]] = code[code[pointer+1]] + code[code[pointer+2]]
+            pointer += 4
+            
+        elif code[pointer] == 2:
+            code[code[pointer+3]] = code[code[pointer+1]] * code[code[pointer+2]]
+            pointer += 4
+            
+        elif code[pointer] == 99:
             return code
 
 data = restData()
