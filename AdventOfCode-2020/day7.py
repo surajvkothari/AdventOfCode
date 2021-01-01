@@ -74,7 +74,7 @@ def get_key_value2(line):
 def create_bags_dict2():
     bags = {}
 
-    with open("test.txt") as f:
+    with open("day7_data.txt") as f:
         for line in f:
             line = line.strip("\n")
             k, v = get_key_value2(line)
