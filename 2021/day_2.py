@@ -23,5 +23,26 @@ def part1(instructions):
 
     print("Part1:", horizonatal*depth)
 
+
+def part2(instructions):
+    horizonatal = 0
+    depth = 0
+    aim = 0
+
+    for ins in instructions:
+        cmd = ins[0]
+        amount = int(ins[1])
+
+        if cmd == "forward":
+            horizonatal += amount
+            depth += (aim * amount)
+        elif cmd == "up":
+            aim -= amount
+        elif cmd == "down":
+            aim += amount
+
+    print("Part2:", horizonatal*depth)
+
 instructions = get_data()
 part1(instructions)
+part2(instructions)
