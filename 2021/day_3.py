@@ -2,17 +2,21 @@
 import pandas as pd
 
 def get_data():
-    with open("day_3_data.txt") as f:
-        # Removes newline character and splits binary string into individual bits
-        binary = [list(line.strip()) for line in f]
+    # Read data from text file into df
+    df = pd.read_table("day_3_data.txt", dtype="object", header=None)
+    # Split each binary string into individual character bits
+    df = df[0].str.split('', expand=True)
+    # Remove the first and last column as these are empty
+    df.drop(columns=[0, df.columns[-1]], inplace=True)
 
-    print(binary)
-    df = pd.DataFrame(binary, dtype="object")  # 2D list into pd dataframe
-    
+    return df
+
+
+def part1(df):
     num_cols = df.shape[1]
 
     # Gets the most common bit for each column
-    gamma_rate = [df[i].mode()[0] for i in range(num_cols)]
+    gamma_rate = [df[i].mode()[0] for i in range(1, num_cols+1)]
     # Epsilon rate is the inverse bits of the gamma rate binary string
     epsilon_rate = ['1' if i == '0' else '0' for i in gamma_rate]
 
@@ -23,9 +27,5 @@ def get_data():
     print("Part1:", gamma_rate_decimal*epsilon_rate_decimal)
 
 
-def part1(binary):
-    pass
-
-
-binary = get_data()
-part1(binary)
+df = get_data()
+part1(df)
