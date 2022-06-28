@@ -2,12 +2,10 @@
 import pandas as pd
 
 def get_data():
-    # Read data from text file into df
-    df = pd.read_table("day_3_data.txt", dtype="object", header=None)
-    # Split each binary string into individual character bits
-    df = df[0].str.split('', expand=True)
-    # Remove the first and last column as these are empty
-    df.drop(columns=[0, df.columns[-1]], inplace=True)
+    num_cols = 12
+
+    # Read tabular data into a dataframe
+    df = pd.read_fwf("day_3_data.txt", widths=[1]*num_cols, header=None, dtype="object")
 
     return df
 
@@ -16,7 +14,7 @@ def part1(df):
     num_cols = df.shape[1]
 
     # Gets the most common bit for each column
-    gamma_rate = [df[i].mode()[0] for i in range(1, num_cols+1)]
+    gamma_rate = [df[i].mode()[0] for i in range(0, num_cols)]
     # Epsilon rate is the inverse bits of the gamma rate binary string
     epsilon_rate = ['1' if i == '0' else '0' for i in gamma_rate]
 
