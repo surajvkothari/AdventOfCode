@@ -20,6 +20,7 @@ def get_data():
 def part1(calorie_sums):
     print("Part 1:", max(calorie_sums))
 
+
 def part2(calorie_sums):
     sorted_calories = sorted(calorie_sums, reverse=True)
     sum_top_3 = sum(sorted_calories[:3])  # Get sum of the 3 highest values
