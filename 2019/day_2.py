@@ -1,3 +1,6 @@
+# Advent of code 2019
+# Day 2
+
 def restData():
     data = []
     with open("data.txt") as f:
@@ -12,11 +15,11 @@ def Intcode(code, pointer):
         if code[pointer] == 1:
             code[code[pointer+3]] = code[code[pointer+1]] + code[code[pointer+2]]
             pointer += 4
-            
+
         elif code[pointer] == 2:
             code[code[pointer+3]] = code[code[pointer+1]] * code[code[pointer+2]]
             pointer += 4
-            
+
         elif code[pointer] == 99:
             return code
 

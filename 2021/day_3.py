@@ -1,4 +1,6 @@
+# Advent of code 2021
 # Day 3
+
 import pandas as pd
 
 def get_data():

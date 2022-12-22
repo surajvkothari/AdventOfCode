@@ -1,4 +1,6 @@
+# Advent of code 2021
 # Day 4
+
 import numpy as np
 
 class BingoBoard():

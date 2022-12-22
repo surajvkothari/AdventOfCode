@@ -1,3 +1,6 @@
+# Advent of code 2019
+# Day 3
+
 """
 Optimised version taken from:
 https://dev.to/jbristow/advent-of-code-2019-solution-megathread-day-3-crossed-wires-3f4b

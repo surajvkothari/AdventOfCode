@@ -1,3 +1,6 @@
+# Advent of code 2019
+# Day 1
+
 data = []
 with open("data.txt") as f:
     for line in f:

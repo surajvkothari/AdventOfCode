@@ -1,3 +1,6 @@
+# Advent of code 2019
+# Day 5
+
 def restData():
     data = []
     with open("data.txt") as f:

@@ -1,4 +1,6 @@
+# Advent of code 2021
 # Day 14
+
 import time
 
 def part1():

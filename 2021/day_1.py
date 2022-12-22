@@ -1,3 +1,4 @@
+# Advent of code 2021
 # Day 1
 
 def get_data():
@@ -5,6 +6,7 @@ def get_data():
         nums = [int(line) for line in f]
 
     return nums
+
 
 def part1(nums):
     increased = 0

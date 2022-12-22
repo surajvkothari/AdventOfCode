@@ -1,3 +1,6 @@
+# Advent of code 2019
+# Day 4
+
 """ Part 1 """
 def checkPswd(pswd):
     # Check 1 - No decreasing

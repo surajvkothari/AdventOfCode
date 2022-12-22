@@ -1,3 +1,4 @@
+# Advent of code 2021
 # Day 2
 
 def get_data():
