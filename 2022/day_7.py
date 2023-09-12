@@ -84,6 +84,30 @@ def part1(filesystem):
 
     print("Part 1:", total_size)
 
+
+def part2(filesystem):
+    total_size = 0
+
+    root_dir_size = filesystem["/_/"].data  # Get the size of the root directory
+
+    unused_space = 70_000_000 - root_dir_size
+    update_space = 30_000_000 - unused_space
+
+    delete_dir_sizes = []  # Stores potential directories to be deleted
+
+    for node_id in filesystem.expand_tree(mode=Tree.DEPTH):
+        node = filesystem[node_id]
+        if node.tag == "dir":
+            if node.data >= update_space:
+                delete_dir_sizes.append(node.data)
+
+    # Get the smallest directory size
+    delete_dir_total_size = min(delete_dir_sizes)
+    print("Part 2:", delete_dir_total_size)
+
+
 commands = get_data()
 filesystem = create_filesystem_tree(commands)
+
 part1(filesystem)
+part2(filesystem)
