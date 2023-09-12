@@ -13,62 +13,59 @@ def get_data():
 def create_filesystem_tree(commands):
     """ Creates a tree of the filesystem using the commands """
     filesystem = Tree()
-    current_dir = '/_/'
-    filesystem.create_node("dir", '/_/', data=0)
+    current_dir = filesystem.create_node("dir", '/_/', data=0)
 
     ls_command = False
     total_dir_size = 0
 
     for line in commands:
+        current_dir_id = current_dir.identifier
         if line[0] == '$':
             # Line is a command
             command = line.split()
             instruction = command[1]
             if instruction == "cd":
-                #print(current_dir, total_dir_size)
-                filesystem[current_dir].data += total_dir_size
+                current_dir.data += total_dir_size
                 if command[2] == "..":
-                    parent_dir = filesystem.parent(current_dir).identifier
+                    parent_dir = filesystem.parent(current_dir_id)
                     # Update parent directory size by adding current directory's size
-                    filesystem[parent_dir].data += filesystem[current_dir].data
-                    total_dir_size = 0 # Reset total directory size
+                    parent_dir.data += current_dir.data
 
                     current_dir = parent_dir  # Update current directory
                 elif command[2] != "/":
-                    # Store the total directory size for the current dir node
-                    total_dir_size = 0 # Reset total directory size
+                    change_dir_id = f"{command[2]}_{current_dir_id}"
+                    current_dir = filesystem[change_dir_id] # Update current directory
 
-                    current_dir_id = f"{command[2]}_{current_dir}"
-                    current_dir = current_dir_id # Update current directory
+                total_dir_size = 0 # Reset total directory size
         else:
             # Line is a file or directory
             output = line.split()
+
             if output[0] == "dir":
                 # Create a directory node
                 dir_name = output[1]
-                dir_id = f"{dir_name}_{current_dir}"
-                filesystem.create_node("dir", dir_id, parent=current_dir, data=0)
-
-
+                dir_id = f"{dir_name}_{current_dir_id}"
+                filesystem.create_node("dir", dir_id, parent=current_dir_id, data=0)
             else:
                 # Create a file node
                 filesize = int(output[0])
                 filename = output[1]
-                file_id = f"{filename}_{current_dir}"
+                file_id = f"{filename}_{current_dir_id}"
 
-                filesystem.create_node("file", file_id, parent=current_dir, data=filesize)
+                filesystem.create_node("file", file_id, parent=current_dir_id, data=filesize)
 
                 # Increment directory filesize
                 total_dir_size += filesize
 
     # Keep going back up the tree until root
-    while filesystem.parent(current_dir):
-        filesystem[current_dir].data += total_dir_size
+    while filesystem.parent(current_dir_id):
+        current_dir.data += total_dir_size
 
-        parent_dir = filesystem.parent(current_dir).identifier
+        parent_dir = filesystem.parent(current_dir_id)
         current_dir = parent_dir
+        current_dir_id = current_dir.identifier
 
-    filesystem[current_dir].data += total_dir_size  # Store the total directory size for the root
+    current_dir.data += total_dir_size  # Store the total directory size for the root
 
     return filesystem
 
@@ -78,9 +75,8 @@ def part1(filesystem):
 
     for node_id in filesystem.expand_tree(mode=Tree.DEPTH):
         node = filesystem[node_id]
-        if node.tag == "dir":
-            if node.data < 100_000:
-                total_size += node.data
+        if node.tag == "dir" and node.data < 100_000:
+            total_size += node.data
 
     print("Part 1:", total_size)
 
@@ -97,9 +93,8 @@ def part2(filesystem):
 
     for node_id in filesystem.expand_tree(mode=Tree.DEPTH):
         node = filesystem[node_id]
-        if node.tag == "dir":
-            if node.data >= update_space:
-                delete_dir_sizes.append(node.data)
+        if node.tag == "dir" and node.data >= update_space:
+            delete_dir_sizes.append(node.data)
 
     # Get the smallest directory size
     delete_dir_total_size = min(delete_dir_sizes)
