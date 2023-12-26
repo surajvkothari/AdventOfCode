@@ -93,23 +93,22 @@ def part2(platform):
     tilted_platform_strings = []
     duplicate_cycle_nums = []
 
-    cycle_num = 0
     while True:
         tilted_platform = spin_cycle(tilted_platform)
-        cycle_num += 1
 
         # Convert platform grid into 1D string
         tilted_platform_str = "".join(tilted_platform.flatten())
         if tilted_platform_str in tilted_platform_strings:
             duplicate_cycle_num = tilted_platform_strings.index(tilted_platform_str) + 1
 
-            # Store duplicate cycles
+            # Check if duplicate cycle number has appeared before
             if duplicate_cycle_num in duplicate_cycle_nums:
                 break  # Exit out of while loop
 
+            # Store duplicate cycles
             duplicate_cycle_nums.append(duplicate_cycle_num)
 
-        tilted_platform_strings.append("".join(tilted_platform.flatten()))
+        tilted_platform_strings.append(tilted_platform_str)
 
     # Get the start/end of the duplicate cycles
     duplicate_cycle_start, duplicate_cycle_end = duplicate_cycle_nums[0], duplicate_cycle_nums[-1]
