@@ -13,27 +13,22 @@ def get_data():
 def roll_north(platform):
     tilted_platform = platform.copy()
 
+    # For each coordinate in platform grid
     for i in range(tilted_platform.shape[0]):
         for j in range(tilted_platform.shape[1]):
-            if tilted_platform[i,j] == 'O':
-                # Get buffer of previous elements in the current column
-                prev_elements = tilted_platform[:i,j]
+            if tilted_platform[i, j] == 'O':
+                # Get string of the column items up to current position
+                column_string = "".join(tilted_platform[:i, j])
 
-                # Remove spaces from the end ('.')
-                for item in np.flip(prev_elements):
-                    if item == '.':
-                        prev_elements = prev_elements[:-1]
-                    else:
-                        break
-
-                # Length of previous elements (after spaces removed) is the position of the rock after tilting
-                new_tilt_position = prev_elements.shape[0]
+                # Remove empty spaces ('.') from the end of string
+                # Length of string will give the new position of the tilted rocks
+                new_tilt_position = len(column_string.rstrip('.'))
 
                 # Check new position is different
-                if (new_tilt_position,j) != (i,j):
+                if (new_tilt_position, j) != (i, j):
                     # Move rock into new position on tilted platform
-                    tilted_platform[new_tilt_position,j] = 'O'
-                    tilted_platform[i,j] = '.'
+                    tilted_platform[new_tilt_position, j] = 'O'
+                    tilted_platform[i, j] = '.'
 
     return tilted_platform
 
@@ -41,39 +36,34 @@ def roll_north(platform):
 def roll_west(platform):
     tilted_platform = platform.copy()
 
+    # For each coordinate in platform grid
     for i in range(tilted_platform.shape[0]):
         for j in range(tilted_platform.shape[1]):
-            if tilted_platform[i,j] == 'O':
-                # Get buffer of previous elements in the current row
-                prev_elements = tilted_platform[i,:j]
+            if tilted_platform[i, j] == 'O':
+                # Get string of the row items up to current position
+                row_string = "".join(tilted_platform[i, :j])
 
-                # Remove spaces from the end ('.')
-                for item in np.flip(prev_elements):
-                    if item == '.':
-                        prev_elements = prev_elements[:-1]
-                    else:
-                        break
-
-                # Length of previous elements (after spaces removed) is the position of the rock after tilting
-                new_tilt_position = prev_elements.shape[0]
+                # Remove empty spaces ('.') from the end of string
+                # Length of string will give the new position of the tilted rocks
+                new_tilt_position = len(row_string.rstrip('.'))
 
                 # Check new position is different
-                if (i,new_tilt_position) != (i,j):
+                if (i, new_tilt_position) != (i, j):
                     # Move rock into new position on tilted platform
-                    tilted_platform[i,new_tilt_position] = 'O'
-                    tilted_platform[i,j] = '.'
+                    tilted_platform[i, new_tilt_position] = 'O'
+                    tilted_platform[i, j] = '.'
 
     return tilted_platform
 
 
 def calculate_load(platform):
-    row_load = platform.shape[0]  # Initialise load of each row to the length of the platform
+    row_load = platform.shape[0]  # Initialise row load to the platform's height
     total_load = 0
 
     for row in platform:
         # Count number of round rocks and multiply by row load
         total_load += np.count_nonzero(row == 'O') * row_load
-        row_load -= 1
+        row_load -= 1  # Decrease row load for each row
 
     return total_load
 
@@ -118,7 +108,7 @@ def part2(platform):
                 break  # Exit out of while loop
 
             duplicate_cycle_nums.append(duplicate_cycle_num)
-    
+
         tilted_platform_strings.append("".join(tilted_platform.flatten()))
 
     # Get the start/end of the duplicate cycles
