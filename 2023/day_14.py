@@ -2,17 +2,18 @@
 # Day 14
 import numpy as np
 
+
 def get_data():
     with open("day_14_data.txt") as f:
         # Convert data into 2D numpy grid
         platform = np.array([np.array(list(row.strip())) for row in f])
-
+        
     return platform
 
 
 def roll_north(platform):
     tilted_platform = platform.copy()
-
+    
     # For each coordinate in platform grid
     for i in range(tilted_platform.shape[0]):
         for j in range(tilted_platform.shape[1]):
