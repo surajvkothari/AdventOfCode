@@ -1,6 +1,8 @@
 # Advent of code 2022
 # Day 3
 
+import numpy as np
+
 def get_data():
     with open("day_3_data.txt") as f:
         strings = [line.strip() for line in f]
@@ -35,8 +37,22 @@ def part1(strings):
 
 
 def part2(strings):
-    pass
+    total_priority = 0
+    GROUP_COUNT = 3
+
+    # Split strings into groups
+    groups = [strings[i:i+(GROUP_COUNT)] for i in range(0, len(strings), GROUP_COUNT)]
+    
+    for group in groups:
+        string1, string2, string3 = group
+        
+        for char in string1:
+            if char in string2 and char in string3:
+                total_priority += get_priority(char)
+                break
+        
+    print("Part 2:", total_priority)
 
 
 strings = get_data()
-part1(strings)
+part2(strings)
