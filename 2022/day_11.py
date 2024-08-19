@@ -29,7 +29,7 @@ class Monkey():
         """ Adds new item when an item is thrown """
         self.items.append(item)
     
-    def operation(self, old):
+    def operation(self, old, is_part2=False):
         new = 0
         
         if self.operator == '+':
@@ -42,8 +42,10 @@ class Monkey():
                 new = old * old
             else:
                 new = old * int(self.op_value)
-         
-        new = int(new / 3)  # Always divide by 3 after operation
+        
+        # If part1, then divide by 3
+        if not is_part2:
+            new = int(new / 3)
 
         self.item_count += 1
 
@@ -102,22 +104,18 @@ def get_data():
 
 
 def part1(monkeys):
-    for r in range(20):
-        for m_id, monkey_obj in enumerate(monkeys):
+    for _ in range(20):
+        for monkey_obj in monkeys:
             for i in monkey_obj.get_items().copy():
-                #print(f"\nMonkey inspects: {i}")
                 new_item = monkey_obj.operation(i)
-                #print(f"New item: {new_item}")
                 
                 # If divisible: monkey a, else: monkey b
                 a, b = monkey_obj.get_throw_monkeys()
 
                 # Throw new item to relevant monkey after checking divisibility
                 if monkey_obj.check_divisibility(new_item):
-                    #print(f"New item thrown to monkey: {a}")
                     monkeys[a].throw_item(new_item)
                 else:
-                    #print(f"New item thrown to monkey: {b}")
                     monkeys[b].throw_item(new_item)
                 
                 monkey_obj.remove_item(i)
@@ -130,10 +128,10 @@ def part1(monkeys):
   
 
 def part2(monkeys):
-    for r in range(1):
-        for m_zd, monkey_obj in enumerate(monkeys):
+    for _ in range(1000):
+        for monkey_obj in monkeys:
             for i in monkey_obj.get_items().copy():
-                new_item = monkey_obj.operation(i)
+                new_item = monkey_obj.operation(i, is_part2=True)
                 
                 # If divisible: monkey a, else: monkey b
                 a, b = monkey_obj.get_throw_monkeys()
@@ -147,8 +145,8 @@ def part2(monkeys):
                 monkey_obj.remove_item(i)
 
     monkey_item_counts = [m_obj.get_item_count() for m_obj in monkeys]
-    monkey_item_counts.sort(reverse=True)
     print(monkey_item_counts)
+    monkey_item_counts.sort(reverse=True)
 
     monkey_business = monkey_item_counts[0] * monkey_item_counts[1]
 
