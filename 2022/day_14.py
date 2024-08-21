@@ -54,7 +54,7 @@ def store_rocks(cave, paths, x_shift):
                     line_range = range(end_y_coord, start_y_coord+1)
 
                 for i in line_range:
-                    cave[i, start_x_coord] = 1  # Add rock
+                    cave[i, start_x_coord] = 1  # Add rock to cave
 
             elif start_y_coord == end_y_coord:
                 # Horizontal Line
@@ -64,20 +64,20 @@ def store_rocks(cave, paths, x_shift):
                     line_range = range(end_x_coord, start_x_coord+1)
 
                 for i in line_range:
-                    cave[start_y_coord, i] = 1  # Add rock
+                    cave[start_y_coord, i] = 1  # Add rock to cave
 
 
 def simulate_sand(cave, x_shift):
     """ Simulates the falling of sand """
     sand_counter = 0
-    not_in_abyss = True
+    run_simulation = True
     
-    while not_in_abyss:
+    while run_simulation:
         sand_position = (0, 500-x_shift)  # Initial position of sand
 
-        not_stopped = True
+        sand_falling = True
 
-        while not_stopped:
+        while sand_falling:
             # Check for space below
             new_sand_position = (sand_position[0]+1, sand_position[1])
             
@@ -95,21 +95,21 @@ def simulate_sand(cave, x_shift):
 
                     if cave[new_sand_position] == 0:
                         sand_position = new_sand_position
-                    # Sand has stopped moving
                     else:
-                        cave[sand_position] = 2  # Add sand
+                        # Sand has stopped falling
+                        cave[sand_position] = 2  # Add sand to cave
                         sand_counter += 1
 
-                        # Sand has been blocked from the top
+                        sand_falling = False
+
+                        # Check if sand has been blocked from the top
                         if sand_position == (0, 500-x_shift):
-                            not_in_abyss = False
-                        
-                        not_stopped = False                
+                            run_simulation = False
 
             # If sand has entered the abyss
             if sand_position[0] == (cave.shape[0]-1):
-                not_stopped = False
-                not_in_abyss = False
+                sand_falling = False
+                run_simulation = False
     
     return sand_counter
     
@@ -140,7 +140,7 @@ def part2(paths):
     sand_counter = simulate_sand(cave, x_shift)
     
     print("Part 2:", sand_counter)
-    
+
 
 paths = get_data()
 part1(paths)
